@@ -81,4 +81,5 @@ if __name__ == '__main__':
             avg_rep_time += time.time() - t0
 
         avg_rep_time /= 60
-        print('Total Time {:.1f} \t Average rep time {:.1f}'.format(avg_rep_time, avg_rep_time / args.reps))
+        print('Total Time {:.1f} minutes \t '
+              'Average rep time {:.1f} minutes'.format(avg_rep_time, avg_rep_time / args.reps))
