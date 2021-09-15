@@ -27,6 +27,7 @@ def main(args, rep_id=0):
     criterion = nn.CrossEntropyLoss()
 
     trainer.train(model, criterion, optimizer, lr_scheduler, train_loader, test_loaders, epochs=args.epochs)
+    trainer.print_report(rep_id)
 
 
 def get_args():
