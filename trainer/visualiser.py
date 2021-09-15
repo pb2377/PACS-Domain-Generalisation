@@ -1,12 +1,12 @@
 import os.path as osp
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
 
-class Visualiser:
+class TrainVisualiser:
     def __init__(self, logdir):
         self.logdir = logdir
 

@@ -20,7 +20,7 @@ def main(args, rep=0):
     logdir = os.path.join('save', args.net,
                           'domainnet' if args.domainnet else 'pacs',
                           '{}-{}'.format(args.target, rep_id))
-    trainer = Trainer(logdir)
+    trainer = Trainer(logdir, rep)
 
     optimizer, lr_scheduler = get_optimizer(args, model.parameters())
     criterion = nn.CrossEntropyLoss()
@@ -28,7 +28,6 @@ def main(args, rep=0):
     # train, log and report DG performance
     trainer.train(model, criterion, optimizer, lr_scheduler, train_loader, test_loaders, epochs=args.epochs)
     trainer.finish_it()
-
 
 
 if __name__ == '__main__':
