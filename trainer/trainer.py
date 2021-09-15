@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import torch
 
+
 # from .visualiser import TrainVisualiser
 
 
@@ -132,4 +133,3 @@ class Trainer:
         self.print_report()
         # visualiser = TrainVisualiser(self.logdir)
         # visualiser()
-
