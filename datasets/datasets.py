@@ -28,7 +28,7 @@ class BaseDataset(data.Dataset):
         imgpath = osp.join(self.data_path, self.list_ids[index])
         img = Image.open(imgpath).convert('RGB')
         lbl = int(self.labels[index])
-        return self.transform(img), lbl
+        return imgpath, self.transform(img), lbl
 
 
 def get_dataloaders(args):

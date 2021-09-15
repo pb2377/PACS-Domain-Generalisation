@@ -8,13 +8,9 @@ class Trainer:
     def __init__(self, logdir):
         self.logdir = logdir
         self.writer = None
-        self.best_val = {'test': 0.,
-                         'val': 0.}
-
         self.train_loss = []
         self.train_acc = []
-        self.val_acc = {'test': [],
-                        'val': []}
+        self.valtest_acc = {'test': [], 'val': []}
 
     def train(self, model, criterion, optimizer, lr_scheduler, train_loader, test_loaders, epochs=30):
         for ep in range(epochs):
@@ -59,7 +55,7 @@ class Trainer:
 
             epoch_loss += loss.item()
             _, cls_preds = class_logits.max(dim=1)
-            epoch_acc += torch.sum(torch.Tensor(cls_preds == labels.data)).item()
+            epoch_acc += torch.sum((cls_preds == labels.data).float()).item()
 
         # Average over training dataset for the epoch
         epoch_acc /= len(train_loader.dataset)
@@ -68,21 +64,18 @@ class Trainer:
 
     def test(self, model, test_loaders):
         model.eval()
-        results = {}
         with torch.no_grad():
             for phase, loader in test_loaders.items():
                 total = len(loader.dataset)
                 class_correct, all_preds = self._test_epoch(model, loader)
                 class_acc = float(class_correct) / total
-                results[phase] = class_acc
-
-                if class_acc > self.best_val[phase]:
+                self.valtest_acc[phase].append(class_acc)
+                if class_acc > max(self.valtest_acc[phase]):
                     self.store_outputs(all_preds, phase)
-                    self.best_val[phase] = class_acc
 
     @staticmethod
     def _test_epoch(model, loader):
-        class_correct = 0
+        class_correct = 0.
         all_preds = {'image_paths': [],
                      'labels': [],
                      'cls_pred': []}
@@ -93,18 +86,18 @@ class Trainer:
 
             class_logit = model(data)
             _, cls_pred = class_logit.max(dim=1)
-            class_correct += torch.sum(torch.Tensor(cls_pred == labels.data)).item()
+            class_correct += torch.sum((cls_pred == labels.data).float()).item()
 
             # attach all preds
-            all_preds['image_paths'].extend(image_paths.tolist())
+            all_preds['image_paths'].extend(list(image_paths))
             all_preds['labels'].extend(labels.tolist())
             all_preds['cls_pred'].extend(cls_pred.tolist())
         return class_correct, all_preds
 
     def store_outputs(self, all_preds, phase):
-        df = pd.Dataframe(all_preds)
+        df = pd.DataFrame(all_preds)
         save_path = os.path.join(self.logdir, 'outputs', '{}-outputs.csv'.format(phase))
-        os.makedirs(save_path, exist_ok=True)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         df.to_csv(save_path)
 
     def write_tensorboard(self):
@@ -115,10 +108,11 @@ class Trainer:
         df = {
             'train_loss': self.train_loss,
             'train_acc': self.train_acc,
-            'val_acc': self.val_acc['val'],
-            'test_acc': self.val_acc['test']
+            'val_acc': self.valtest_acc['val'],
+            'test_acc': self.valtest_acc['test']
               }
-        df = pd.Dataframe(df)
+
+        df = pd.DataFrame(df)
         save_path = os.path.join(self.logdir, 'outputs', 'performance_log.csv')
-        os.makedirs(save_path, exist_ok=True)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         df.to_csv(save_path)

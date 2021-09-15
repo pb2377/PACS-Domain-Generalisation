@@ -18,7 +18,7 @@ def main(args, rep_id=0):
     train_loader, test_loaders = get_dataloaders(args)
 
     # build trainer
-    logdir = os.path.join('models', args.net,
+    logdir = os.path.join('save', args.net,
                           'domainnet' if args.domainnet else 'pacs',
                           '{}-{}'.format(args.target, rep_id))
     trainer = Trainer(logdir)
