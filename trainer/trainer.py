@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import torch
 
+from ..utils import visualisers
+
 
 class Trainer:
     def __init__(self, logdir):
@@ -124,3 +126,11 @@ class Trainer:
         best_test = np.max(self.valtest_acc['test'])
         print('\tRep-{}:\tBest CV Accuracy @ Epoch-{}={:.3f} '
               '\tvs.\tBest overall Test accuracy={:.3}'.format(rep, best_idx, best_cv, best_test))
+
+    def visualise_training(self):
+        # visualise training Acc and Loss
+        # visualise val/test Accuracy
+        # visualise confusion matrices
+        pass
+
+
