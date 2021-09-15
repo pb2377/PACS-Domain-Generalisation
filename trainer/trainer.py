@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from .visualiser import TrainVisualiser
+# from .visualiser import TrainVisualiser
 
 
 class Trainer:
@@ -130,5 +130,6 @@ class Trainer:
 
     def finish_it(self):
         self.print_report()
-        visualiser = TrainVisualiser(self.logdir)
-        visualiser()
+        # visualiser = TrainVisualiser(self.logdir)
+        # visualiser()
+
