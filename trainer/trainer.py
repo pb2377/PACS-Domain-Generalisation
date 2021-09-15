@@ -71,7 +71,7 @@ class Trainer:
                 class_correct, all_preds = self._test_epoch(model, loader)
                 class_acc = float(class_correct) / total
                 self.valtest_acc[phase].append(class_acc)
-                if class_acc > max(self.valtest_acc[phase]):
+                if class_acc >= max(self.valtest_acc[phase]):
                     self.store_outputs(all_preds, phase)
 
     @staticmethod

@@ -73,7 +73,7 @@ if __name__ == '__main__':
         assert target not in source
         args.sources = source
         args.target = target
-        print("\nTarget domain: {} \tSource domains: {}".format(args.target, args.sources))
+        print("\nTarget domain: {}\tSource domains: {}".format(args.target, args.sources))
         avg_rep_time = 0.
         for rep_id in range(args.reps):
             t0 = time.time()
@@ -81,5 +81,5 @@ if __name__ == '__main__':
             avg_rep_time += time.time() - t0
 
         avg_rep_time /= 60
-        print('Total Time {:.1f} minutes \t '
-              'Average rep time {:.1f} minutes'.format(avg_rep_time, avg_rep_time / args.reps))
+        print('\tTotal Time {:.1f} minutes \t '
+              '({:.1f} minutes avg)'.format(avg_rep_time, avg_rep_time / args.reps))
