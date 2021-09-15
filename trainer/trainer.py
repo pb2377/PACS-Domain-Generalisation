@@ -4,11 +4,12 @@ import numpy as np
 import pandas as pd
 import torch
 
-from ..utils import visualisers
+from ..utils import Visualiser
 
 
 class Trainer:
-    def __init__(self, logdir):
+    def __init__(self, logdir, rep):
+        self.rep = rep
         self.logdir = logdir
         self.writer = None
         self.train_loss = []
@@ -99,7 +100,7 @@ class Trainer:
 
     def store_outputs(self, all_preds, phase):
         df = pd.DataFrame(all_preds)
-        save_path = os.path.join(self.logdir, 'outputs', '{}-outputs.csv'.format(phase))
+        save_path = os.path.join(self.logdir, '{}-outputs.csv'.format(phase))
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         df.to_csv(save_path, index=False)
 
@@ -116,21 +117,20 @@ class Trainer:
         }
 
         df = pd.DataFrame(df)
-        save_path = os.path.join(self.logdir, 'outputs', 'performance_log.csv')
+        save_path = os.path.join(self.logdir, 'performance_log.csv')
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         df.to_csv(save_path, index=False)
 
-    def print_report(self, rep):
+    def print_report(self):
         best_idx = np.array(self.valtest_acc['val']).argmax()
         best_cv = self.valtest_acc['test'][best_idx]
         best_test = np.max(self.valtest_acc['test'])
         print('\tRep-{}:\tBest CV Accuracy @ Epoch-{}={:.3f} '
-              '\tvs.\tBest overall Test accuracy={:.3}'.format(rep, best_idx, best_cv, best_test))
+              '\tvs.\tBest overall Test accuracy={:.3}'.format(self.rep, best_idx, best_cv, best_test))
 
-    def visualise_training(self):
-        # visualise training Acc and Loss
-        # visualise val/test Accuracy
-        # visualise confusion matrices
-        pass
+    def finish_it(self):
+        self.print_report()
+        visualiser = Visualiser(self.logdir)
+        visualiser()
 
 

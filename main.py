@@ -27,7 +27,8 @@ def main(args, rep=0):
 
     # train, log and report DG performance
     trainer.train(model, criterion, optimizer, lr_scheduler, train_loader, test_loaders, epochs=args.epochs)
-    trainer.print_report(rep)
+    trainer.finish_it()
+
 
 
 if __name__ == '__main__':
