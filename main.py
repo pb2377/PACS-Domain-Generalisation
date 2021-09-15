@@ -7,7 +7,7 @@ import torch.nn as nn
 from trainer import Trainer
 from networks import build_model
 from datasets import get_dataloaders
-from utils import get_optimizer
+from utils import get_optimizer, get_setup
 
 
 def main(args, rep=0):
@@ -26,6 +26,7 @@ def main(args, rep=0):
     optimizer, lr_scheduler = get_optimizer(args, model.parameters())
     criterion = nn.CrossEntropyLoss()
 
+    # train, log and report DG performance
     trainer.train(model, criterion, optimizer, lr_scheduler, train_loader, test_loaders, epochs=args.epochs)
     trainer.print_report(rep)
 
@@ -57,29 +58,24 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-
-    if args.domainnet:
-        domain_list = ['clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch']
-        raise NotImplementedError
-    else:
-        domain_list = ['photo', 'art_painting', 'cartoon', 'sketch']
-
-    setups = {tar: [sc for sc in domain_list if sc != tar] for tar in domain_list}
-    if args.target is not None:
-        assert args.target in domain_list
-        setups = {k: d for k, d in setups.items() if k == args.target}
-
-    for target, source in setups.items():
+    domain_setups = get_setup(args)
+    for target, source in domain_setups.items():
         assert target not in source
         args.sources = source
         args.target = target
         print("\nTarget domain: {}\tSource domains: {}".format(args.target, args.sources))
         avg_rep_time = 0.
+
+        # Repeat the initialise and train, as artistic DG often varies a lot run to run.
         for rep_id in range(args.reps):
             t0 = time.time()
+
+            # Main fn
             main(args, rep_id)
+
             avg_rep_time += time.time() - t0
 
+        # report how long each training rep took.
         avg_rep_time /= 60
         print('\tTotal Time {:.1f} minutes \t '
               '({:.1f} minutes avg)'.format(avg_rep_time, avg_rep_time / args.reps))
