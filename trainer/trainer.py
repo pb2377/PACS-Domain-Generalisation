@@ -99,7 +99,7 @@ class Trainer:
         df = pd.DataFrame(all_preds)
         save_path = os.path.join(self.logdir, 'outputs', '{}-outputs.csv'.format(phase))
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        df.to_csv(save_path)
+        df.to_csv(save_path, index=False)
 
     def write_tensorboard(self):
         # Tensorboard reports aren't going atm because the GPU port clusters have changed and it no longer works
@@ -116,7 +116,7 @@ class Trainer:
         df = pd.DataFrame(df)
         save_path = os.path.join(self.logdir, 'outputs', 'performance_log.csv')
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        df.to_csv(save_path)
+        df.to_csv(save_path, index=False)
 
     def print_report(self, rep):
         best_idx = np.array(self.valtest_acc['val']).argmax()
