@@ -122,6 +122,5 @@ class Trainer:
         best_idx = np.array(self.valtest_acc['val']).argmax()
         best_cv = self.valtest_acc['test'][best_idx]
         best_test = np.max(self.valtest_acc['test'])
-        print('\t Rep-{}: Best CV Accuracy @ Epoch-{}={:.3f} '
-              '\tvs.\t Best overall Test accuracy={:.3}'.format(rep, best_idx, best_cv, best_test))
-
+        print('\tRep-{}:\tBest CV Accuracy @ Epoch-{}={:.3f} '
+              '\tvs.\tBest overall Test accuracy={:.3}'.format(rep, best_idx, best_cv, best_test))
