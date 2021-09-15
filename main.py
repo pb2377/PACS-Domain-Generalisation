@@ -10,7 +10,7 @@ from datasets import get_dataloaders
 from utils import get_optimizer
 
 
-def main(args, rep_id=0):
+def main(args, rep=0):
     # Get model
     model = build_model(args)
 
@@ -27,7 +27,7 @@ def main(args, rep_id=0):
     criterion = nn.CrossEntropyLoss()
 
     trainer.train(model, criterion, optimizer, lr_scheduler, train_loader, test_loaders, epochs=args.epochs)
-    trainer.print_report(rep_id)
+    trainer.print_report(rep)
 
 
 def get_args():
