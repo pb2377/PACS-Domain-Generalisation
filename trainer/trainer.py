@@ -1,8 +1,8 @@
 import os
 
-import torch
 import numpy as np
 import pandas as pd
+import torch
 
 
 class Trainer:
@@ -111,7 +111,7 @@ class Trainer:
             'train_acc': self.train_acc,
             'val_acc': self.valtest_acc['val'],
             'test_acc': self.valtest_acc['test']
-              }
+        }
 
         df = pd.DataFrame(df)
         save_path = os.path.join(self.logdir, 'outputs', 'performance_log.csv')

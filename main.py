@@ -3,9 +3,9 @@ import time
 
 import torch.nn as nn
 
-from trainer import Trainer
-from networks import build_model
 from datasets import get_dataloaders
+from networks import build_model
+from trainer import Trainer
 from utils import get_optimizer, get_setup, get_args
 
 

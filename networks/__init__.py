@@ -1,7 +1,7 @@
 import torch.nn as nn
 
-from .resnet import *
 from .alexnet import *
+from .resnet import *
 
 
 def build_model(args):
@@ -10,7 +10,7 @@ def build_model(args):
         'resnet18': resnet18,
         'resnet50': resnet50,
         'alexnet': alexnet
-                }
+    }
 
     model = model_dict[args.net](pretrained=True, progress=True)
     # fix FC layer

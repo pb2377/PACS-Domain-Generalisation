@@ -1,11 +1,10 @@
 import os.path as osp
 
-import torch
 import pandas as pd
+import torch
 import torch.utils.data as data
-from torchvision import transforms
 from PIL import Image
-
+from torchvision import transforms
 
 IMAGE_SIZE = 224
 
@@ -62,7 +61,7 @@ def get_dataloaders(args):
                                            num_workers=args.num_workers, pin_memory=True, drop_last=False),
         'test': torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False,
                                             num_workers=args.num_workers, pin_memory=True, drop_last=False)
-                    }
+    }
 
     return train_loader, test_loaders
 
@@ -78,7 +77,7 @@ def get_transforms(args):
         transforms.RandomGrayscale(p=p_grey),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ]
+    ]
     train_tr = transforms.Compose(train_tr)
 
     # Test Transform
